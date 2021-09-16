@@ -1,5 +1,5 @@
 # References:
-1. Terraform : https://github.com/greyhats13/evm-do-infra
+1. Terraform : https://github.com/greyhats13/evermos-technical-test-infra
 2. Sample service deployment with Dockerfile, Jenkinsfile, and Helm from public Repo:
 - https://github.com/greyhats13/evm-do-infra 
   ref: Public Repo: https://github.com/banyucenter/belajarflask.git
