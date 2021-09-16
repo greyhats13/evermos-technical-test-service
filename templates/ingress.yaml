@@ -1,0 +1,37 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := .Release.Name -}}
+{{- $svcPort := .Values.service.port -}}
+{{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else -}}
+apiVersion: networking.k8s.io/v1
+{{- end }}
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "evm-core-api.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+  {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          - path: /
+            backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+            pathType: Prefix
+  tls:
+    - hosts:
+        - {{ .host | quote }}
+      secretName: {{ $fullName }}
+  {{- end }}
+{{- end }}
